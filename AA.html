@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>برنامج بيع الأدوات</title>
+    <style>
+        body {
+            background-color: white;
+            font-family: Arial;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: black;
+            color: gold;
+            text-align: center;
+            padding: 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .products, .form, .bill {
+            margin: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .product {
+            text-align: center;
+        }
+
+        .product img {
+            width: 170px;
+            height: 150px;
+            cursor: pointer;
+            border: 1px solid #aaa;
+        }
+
+        .inputs, .bill-table {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        input[type="number"], input[type="text"] {
+            width: 150px;
+            padding: 10px;
+            margin: 5px;
+            font-size: 16px;
+        }
+
+        table {
+            border-collapse: collapse;
+            margin: auto;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px 20px;
+        }
+
+        .actions {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 5px;
+            cursor: pointer;
+        }
+
+        .buy {
+            background-color: silver;
+            color: white;
+        }
+
+        .new-bill {
+            background-color: green;
+            color: white;
+        }
+
+    </style>
+</head>
+<body>
+
+<header>برنامج بيع الأدوات</header>
+
+<section class="products">
+    <div class="product">
+        <img src="download.png" alt="saw">
+        <div>saw - 10 ريال</div>
+        <input type="number" min="0" max="20" id="qty0" value="0">
+    </div>
+    <div class="product">
+        <img src="images.png" alt="drill">
+        <div>drill - 30 ريال</div>
+        <input type="number" min="0" max="20" id="qty1" value="0">
+    </div>
+    <div class="product">
+        <img src="imagess.png" alt="hammer">
+        <div>hammer - 15 ريال</div>
+        <input type="number" min="0" max="20" id="qty2" value="0">
+    </div>
+</section>
+
+<section class="inputs">
+    <input type="text" id="customerName" placeholder="الاسم">
+    <input type="text" id="phone" placeholder="الهاتف">
+    <input type="text" id="total" placeholder="الإجمالي" readonly>
+    <input type="text" id="date" placeholder="التاريخ" readonly>
+</section>
+
+<section class="actions">
+    <button class="buy" onclick="generateBill()">شراء</button>
+    <button class="new-bill" onclick="resetBill()">فاتورة جديدة</button>
+</section>
+
+<section class="bill-table">
+    <table id="bill">
+        <thead>
+            <tr>
+                <th>المنتج</th>
+                <th>السعر</th>
+                <th>الكمية</th>
+                <th>الإجمالي</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</section>
+
+<script>
+    const products = [
+        { name: "saw", price: 10 },
+        { name: "drill", price: 30 },
+        { name: "hammer", price: 15 }
+    ];
+
+    function generateBill() {
+        const tbody = document.querySelector("#bill tbody");
+        tbody.innerHTML = "";
+        let totalAll = 0;
+
+        products.forEach((product, index) => {
+            const qty = parseInt(document.getElementById(`qty${index}`).value);
+            if (qty > 0) {
+                const total = qty * product.price;
+                totalAll += total;
+                const row = `<tr>
+                    <td>${product.name}</td>
+                    <td>${product.price}</td>
+                    <td>${qty}</td>
+                    <td>${total}</td>
+                </tr>`;
+                tbody.innerHTML += row;
+            }
+        });
+
+        document.getElementById("total").value = `${totalAll} ريال`;
+        const date = new Date().toLocaleDateString('ar-EG');
+        document.getElementById("date").value = date;
+    }
+
+    function resetBill() {
+        products.forEach((_, i) => document.getElementById(`qty${i}`).value = 0);
+        document.getElementById("bill").querySelector("tbody").innerHTML = "";
+        document.getElementById("total").value = "";
+        document.getElementById("date").value = "";
+    }
+</script>
+
+</body>
+</html>
